@@ -18,8 +18,6 @@ public class RequestAttachment {
     @JsonIgnore // για να μη γίνεται recursion στο JSON
     private Request request;
 
-    @Column(name = "doc_type", nullable = false, length = 50)
-    private String docType;
 
     @Column(name = "original_filename", nullable = false, length = 255)
     private String originalFilename;
@@ -44,9 +42,6 @@ public class RequestAttachment {
 
     public Request getRequest() { return request; }
     public void setRequest(Request request) { this.request = request; }
-
-    public String getDocType() { return docType; }
-    public void setDocType(String docType) { this.docType = docType; }
 
     public String getOriginalFilename() { return originalFilename; }
     public void setOriginalFilename(String originalFilename) { this.originalFilename = originalFilename; }

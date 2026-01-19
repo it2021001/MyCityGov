@@ -2,18 +2,14 @@ package gr.mycitygov.dto.requesttype;
 
 import gr.mycitygov.enums.RequestCategory;
 
-public class RequestTypeViewDto {
-    private Long id;
+public class UpdateRequestTypeDto {
     private String name;
     private String description;
     private Integer slaDays;
     private RequestCategory category;
-    private Boolean active;
     private Long departmentId;
-    private Integer requiredAttachments;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private Boolean active;
+    private String requiredAttachments;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -30,10 +26,9 @@ public class RequestTypeViewDto {
     public Long getDepartmentId() { return departmentId; }
     public void setDepartmentId(Long departmentId) { this.departmentId = departmentId; }
 
-    public Integer getRequiredAttachments() { return requiredAttachments; }
-    public void setRequiredAttachments(Integer requiredAttachments) { this.requiredAttachments = requiredAttachments; }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 
-    public Boolean getActive() {return active;}
-
-    public void setActive(Boolean active) {this.active = active;}
+    public String getRequiredAttachments() { return requiredAttachments; }
+    public void setRequiredAttachments(String requiredAttachments) { this.requiredAttachments = requiredAttachments; }
 }

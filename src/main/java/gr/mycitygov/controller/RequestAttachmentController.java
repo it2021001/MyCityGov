@@ -2,8 +2,8 @@ package gr.mycitygov.controller;
 
 import gr.mycitygov.dto.attachment.RequestAttachmentViewDto;
 import gr.mycitygov.model.RequestAttachment;
-import gr.mycitygov.repository.RequestAttachmentRepository;
 import gr.mycitygov.service.RequestAttachmentService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,38 +14,43 @@ import java.util.List;
 public class RequestAttachmentController {
 
     private final RequestAttachmentService attachmentService;
-    private final RequestAttachmentRepository attachmentRepository;
 
-    public RequestAttachmentController(RequestAttachmentService attachmentService,
-                                       RequestAttachmentRepository attachmentRepository) {
+    public RequestAttachmentController(RequestAttachmentService attachmentService) {
         this.attachmentService = attachmentService;
-        this.attachmentRepository = attachmentRepository;
     }
 
+    /**
+     * CITIZEN / ADMIN:
+     * Ανέβασμα συνημμένου αρχείου (PDF) σε αίτημα.
+     * Ο πολίτης μπορεί να ανεβάσει αρχείο μόνο σε αιτήματα που του ανήκουν.
+     */
+    @PreAuthorize("hasAnyRole('CITIZEN','ADMIN')")
     @PostMapping(consumes = "multipart/form-data")
     public RequestAttachment upload(@PathVariable Long requestId,
-                                    @RequestParam String docType,
                                     @RequestParam MultipartFile file) {
-        return attachmentService.addAttachment(requestId, docType, file);
+        return attachmentService.addAttachment(requestId, file);
     }
 
-
+    /**
+     * CITIZEN / ADMIN:
+     * Λίστα συνημμένων αρχείων ενός αιτήματος.
+     * Ο πολίτης βλέπει μόνο συνημμένα από δικά του αιτήματα.
+     */
+    @PreAuthorize("hasAnyRole('CITIZEN','ADMIN')")
     @GetMapping
     public List<RequestAttachmentViewDto> list(@PathVariable Long requestId) {
-        return attachmentRepository.findByRequestId(requestId)
-                .stream()
-                .map(this::toDto)
-                .toList();
+        return attachmentService.listAttachments(requestId);
     }
 
-    private RequestAttachmentViewDto toDto(RequestAttachment a) {
-        RequestAttachmentViewDto dto = new RequestAttachmentViewDto();
-        dto.setId(a.getId());
-        dto.setDocType(a.getDocType());
-        dto.setOriginalFilename(a.getOriginalFilename());
-        dto.setContentType(a.getContentType());
-        dto.setFileSize(a.getFileSize());
-        dto.setUploadedAt(a.getUploadedAt());
-        return dto;
+    /**
+     * CITIZEN / ADMIN:
+     * Διαγραφή συνημμένου αρχείου από αίτημα.
+     * Επιτρέπεται μόνο αν το αίτημα ανήκει στον πολίτη.
+     */
+    @PreAuthorize("hasAnyRole('CITIZEN','ADMIN')")
+    @DeleteMapping("/{attachmentId}")
+    public void delete(@PathVariable Long requestId,
+                       @PathVariable Long attachmentId) {
+        attachmentService.deleteAttachment(requestId, attachmentId);
     }
 }

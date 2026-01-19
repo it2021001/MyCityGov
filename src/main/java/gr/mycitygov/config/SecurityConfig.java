@@ -1,44 +1,53 @@
 package gr.mycitygov.config;
 
-import jakarta.annotation.PostConstruct;
+import gr.mycitygov.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity // ✅ για @PreAuthorize
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
 
         http
-                // Για να μπορείς να τεστάρεις API εύκολα (και να μη σε κόβει CSRF)
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // REST API (προσωρινά ανοιχτό)
-                        .requestMatchers("/api/**").permitAll()
-
-                        // Swagger (αν το έχεις)
+                        // Swagger
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
 
-                        // H2 console (αν το χρησιμοποιήσεις ξανά)
-                        .requestMatchers("/h2-console/**").permitAll()
+                        // Auth
+                        .requestMatchers("/api/auth/**").permitAll()
 
-                        // Ό,τι άλλο είναι UI -> θέλει login
-                        .anyRequest().authenticated()
+                        // Public catalog
+                        .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+
+                        // Everything else under /api requires login
+                        .requestMatchers("/api/**").authenticated()
+
+                        .anyRequest().permitAll()
                 )
-                .formLogin(Customizer.withDefaults())
-                .logout(Customizer.withDefaults());
+
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
-
-    @PostConstruct
-    public void loaded() {
-        System.out.println(">>> SecurityConfig LOADED");
-    }
-
 }

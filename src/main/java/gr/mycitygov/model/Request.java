@@ -56,6 +56,12 @@ public class Request {
     @Column(name = "citizen_id_number", length = 20)
     private String citizenIdNumber;        // APPLICATION
 
+    @Column(name="citizen_user_id", nullable=false)
+    private Long citizenUserId;
+
+    @Column(name = "assigned_employee_user_id")
+    private Long assignedEmployeeUserId;
+
 
     /* =======================
        Getters & Setters
@@ -64,6 +70,7 @@ public class Request {
     public Long getId() {
         return id;
     }
+    public void setId(Long id) {this.id = id;}
 
     public String getProtocolNumber() {
         return protocolNumber;
@@ -156,4 +163,9 @@ public class Request {
         this.citizenIdNumber = citizenIdNumber;
     }
 
+    public Long getCitizenUserId() {return citizenUserId;}
+    public void setCitizenUserId(Long citizenUserId) {this.citizenUserId = citizenUserId;}
+
+    public Long getAssignedEmployeeUserId() {return assignedEmployeeUserId;}
+    public void setAssignedEmployeeUserId(Long assignedEmployeeUserId) {this.assignedEmployeeUserId = assignedEmployeeUserId;}
 }

@@ -50,51 +50,60 @@ INSERT INTO department (id, name) VALUES
                                       (4, 'Οικονομική Υπηρεσία'),
                                       (5, 'Κοινωνική Υπηρεσία');
 
-INSERT INTO request_type VALUES
-                             (1, 'Βεβαίωση Μόνιμης Κατοικίας',
-                              'Έκδοση βεβαίωσης μόνιμης κατοικίας για χρήση σε δημόσιες ή ιδιωτικές υπηρεσίες.',
-                              'APPLICATION', 7, TRUE, 1),
+UPDATE request_type SET required_attachments = 1 WHERE id = 11;
+UPDATE request_type SET required_attachments = 2 WHERE id IN (1,2,3,4,7);
+UPDATE request_type SET required_attachments = 3 WHERE id IN (5,6);
+UPDATE request_type SET required_attachments = 4 WHERE id IN (8,9,10);
 
-                             (2, 'Βεβαίωση Οικογενειακής Κατάστασης',
-                              'Έκδοση πιστοποιητικού οικογενειακής κατάστασης για διοικητικές διαδικασίες.',
-                              'APPLICATION', 7, TRUE, 1),
+INSERT INTO request_type
+(name, description, category, sla_days, active, department_id, required_attachments)
+VALUES
+    ('Βεβαίωση Μόνιμης Κατοικίας',
+     'Έκδοση βεβαίωσης μόνιμης κατοικίας για χρήση σε δημόσιες ή ιδιωτικές υπηρεσίες.',
+     'APPLICATION', 7, b'1', 1, 2),
 
-                             (3, 'Πιστοποιητικό Γέννησης',
-                              'Αίτηση έκδοσης πιστοποιητικού γέννησης για επίσημη χρήση.',
-                              'APPLICATION', 10, TRUE, 2),
+    ('Βεβαίωση Οικογενειακής Κατάστασης',
+     'Έκδοση πιστοποιητικού οικογενειακής κατάστασης για διοικητικές διαδικασίες.',
+     'APPLICATION', 7, b'1', 1, 2),
 
-                             (4, 'Πιστοποιητικό Οικογενειακής Μερίδας',
-                              'Έκδοση πιστοποιητικού οικογενειακής μερίδας από το δημοτολόγιο.',
-                              'APPLICATION', 10, TRUE, 2),
+    ('Πιστοποιητικό Γέννησης',
+     'Αίτηση έκδοσης πιστοποιητικού γέννησης για επίσημη χρήση.',
+     'APPLICATION', 10, b'1', 2, 2),
 
-                             (5, 'Άδεια Κατάληψης Πεζοδρομίου',
-                              'Αίτηση άδειας για προσωρινή κατάληψη κοινόχρηστου χώρου λόγω εργασιών.',
-                              'APPLICATION', 12, TRUE, 3),
+    ('Πιστοποιητικό Οικογενειακής Μερίδας',
+     'Έκδοση πιστοποιητικού οικογενειακής μερίδας από το δημοτολόγιο.',
+     'APPLICATION', 10, b'1', 2, 2),
 
-                             (6, 'Βεβαίωση Τεχνικών Στοιχείων Ακινήτου',
-                              'Αίτηση βεβαίωσης για τεχνικά στοιχεία που αφορούν ακίνητο ή εγκατάσταση.',
-                              'APPLICATION', 12, TRUE, 3),
+    ('Άδεια Κατάληψης Πεζοδρομίου',
+     'Αίτηση άδειας για προσωρινή κατάληψη κοινόχρηστου χώρου λόγω εργασιών.',
+     'APPLICATION', 12, b'1', 3, 3),
 
-                             (7, 'Βεβαίωση Μη Οφειλής',
-                              'Έκδοση βεβαίωσης ότι δεν υπάρχουν ληξιπρόθεσμες οφειλές προς τον Δήμο.',
-                              'APPLICATION', 8, TRUE, 4),
+    ('Βεβαίωση Τεχνικών Στοιχείων Ακινήτου',
+     'Αίτηση βεβαίωσης για τεχνικά στοιχεία που αφορούν ακίνητο.',
+     'APPLICATION', 12, b'1', 3, 3),
 
-                             (8, 'Ρύθμιση Οφειλών',
-                              'Υποβολή αιτήματος για ρύθμιση ή διακανονισμό οφειλών σε δόσεις.',
-                              'APPLICATION', 15, TRUE, 4),
+    ('Βεβαίωση Μη Οφειλής',
+     'Έκδοση βεβαίωσης ότι δεν υπάρχουν ληξιπρόθεσμες οφειλές.',
+     'APPLICATION', 8, b'1', 4, 2),
 
-                             (9, 'Αίτηση Κοινωνικής Στήριξης',
-                              'Υποβολή αιτήματος αξιολόγησης για παροχή κοινωνικής υποστήριξης.',
-                              'APPLICATION', 15, TRUE, 5),
+    ('Ρύθμιση Οφειλών',
+     'Υποβολή αιτήματος για ρύθμιση ή διακανονισμό οφειλών.',
+     'APPLICATION', 15, b'1', 4, 4),
 
-                             (10, 'Βοήθεια στο Σπίτι',
-                              'Αίτημα ενημέρωσης ή ένταξης σε πρόγραμμα υποστήριξης στο σπίτι.',
-                              'APPLICATION', 15, TRUE, 5);
+    ('Αίτηση Κοινωνικής Στήριξης',
+     'Υποβολή αιτήματος κοινωνικής υποστήριξης.',
+     'APPLICATION', 15, b'1', 5, 4),
 
-INSERT INTO request_type VALUES
-    (11, 'Αναφορά Προβλήματος στην Πόλη',
-     'Αναφέρετε προβλήματα σε κοινόχρηστους χώρους όπως φωτισμός, λακκούβες, σπασμένα πεζοδρόμια, καθαριότητα/απορρίμματα ή άλλες τεχνικές βλάβες.',
-     'PROBLEM_REPORT', 5, TRUE, 3);
+    ('Βοήθεια στο Σπίτι',
+     'Πρόγραμμα υποστήριξης στο σπίτι.',
+     'APPLICATION', 15, b'1', 5, 4),
+
+    ('Αναφορά Προβλήματος στην Πόλη',
+     'Αναφέρετε προβλήματα σε κοινόχρηστους χώρους.',
+     'PROBLEM_REPORT', 5, b'1', 3, 1);
+
+
+
 
 UPDATE request_type
 SET description = 'Έκδοση βεβαίωσης μόνιμης κατοικίας για χρήση σε δημόσιες ή ιδιωτικές υπηρεσίες.
@@ -146,6 +155,12 @@ SET description = 'Αίτημα ενημέρωσης ή ένταξης σε πρ
 \nΑπαιτούμενα δικαιολογητικά:\n- Αντίγραφο δελτίου ταυτότητας\n- Ιατρική γνωμάτευση\n- Πιστοποιητικό οικογενειακής κατάστασης\n- Εκκαθαριστικό σημείωμα ή αποδεικτικό εισοδήματος'
 WHERE id = 10;
 
+UPDATE request_type
+SET description = 'Αναφέρετε προβλήματα σε κοινόχρηστους χώρους όπως φωτισμός, λακκούβες, σπασμένα πεζοδρόμια, καθαριότητα/απορρίμματα ή άλλες τεχνικές βλάβες.
+\nΑπαιτούμενα δικαιολογητικά:\n- Αντίγραφο δελτίου ταυτότητας'
+WHERE id = 11;
+
+
 CREATE TABLE request_attachment (
                                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
@@ -164,13 +179,12 @@ CREATE TABLE request_attachment (
                                         FOREIGN KEY (request_id) REFERENCES request(id)
 );
 
+ALTER TABLE request_attachment
+    DROP column doc_type;
 
 ALTER TABLE request_type
     ADD COLUMN required_attachments INT NOT NULL DEFAULT 0;
 
-UPDATE request_type SET required_attachments = 2 WHERE id IN (1,2,3,4,7);
-UPDATE request_type SET required_attachments = 3 WHERE id IN (5,6);
-UPDATE request_type SET required_attachments = 4 WHERE id IN (8,9,10);
 
 CREATE TABLE department_schedule (
                                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -195,3 +209,167 @@ CREATE TABLE appointment (
 );
 
 CREATE INDEX idx_appointment_dept_start ON appointment(department_id, start_at);
+
+
+-- 1) ΚΕΠ (id=1): Mon-Fri 09:00-15:00
+INSERT INTO department_schedule(department_id, day_of_week, start_time, end_time) VALUES
+                                                                                      (1,'MONDAY','09:00:00','15:00:00'),
+                                                                                      (1,'TUESDAY','09:00:00','15:00:00'),
+                                                                                      (1,'WEDNESDAY','09:00:00','15:00:00'),
+                                                                                      (1,'THURSDAY','09:00:00','15:00:00'),
+                                                                                      (1,'FRIDAY','09:00:00','15:00:00');
+
+-- 2) Δημοτολόγιο/Ληξιαρχείο (id=2): Mon-Fri 09:00-13:00
+INSERT INTO department_schedule(department_id, day_of_week, start_time, end_time) VALUES
+                                                                                      (2,'MONDAY','09:00:00','13:00:00'),
+                                                                                      (2,'TUESDAY','09:00:00','13:00:00'),
+                                                                                      (2,'WEDNESDAY','09:00:00','13:00:00'),
+                                                                                      (2,'THURSDAY','09:00:00','13:00:00'),
+                                                                                      (2,'FRIDAY','09:00:00','13:00:00');
+
+-- 3) Τεχνική Υπηρεσία (id=3): Mon-Fri 10:00-14:00
+INSERT INTO department_schedule(department_id, day_of_week, start_time, end_time) VALUES
+                                                                                      (3,'MONDAY','10:00:00','14:00:00'),
+                                                                                      (3,'TUESDAY','10:00:00','14:00:00'),
+                                                                                      (3,'WEDNESDAY','10:00:00','14:00:00'),
+                                                                                      (3,'THURSDAY','10:00:00','14:00:00'),
+                                                                                      (3,'FRIDAY','10:00:00','14:00:00');
+
+-- 4) Οικονομική (id=4): Mon/Wed/Fri 09:00-13:00
+INSERT INTO department_schedule(department_id, day_of_week, start_time, end_time) VALUES
+                                                                                      (4,'MONDAY','09:00:00','13:00:00'),
+                                                                                      (4,'WEDNESDAY','09:00:00','13:00:00'),
+                                                                                      (4,'FRIDAY','09:00:00','13:00:00');
+
+-- 5) Κοινωνική (id=5): Tue/Thu 09:00-13:00
+INSERT INTO department_schedule(department_id, day_of_week, start_time, end_time) VALUES
+                                                                                      (5,'TUESDAY','09:00:00','13:00:00'),
+                                                                                      (5,'THURSDAY','09:00:00','13:00:00');
+
+
+-- =========================
+-- USERS
+-- =========================
+CREATE TABLE users (
+                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
+
+                       username VARCHAR(50) NOT NULL UNIQUE,
+                       password_hash VARCHAR(255) NOT NULL,
+
+                       role VARCHAR(20) NOT NULL,         -- CITIZEN / EMPLOYEE / ADMIN
+                       enabled BOOLEAN NOT NULL DEFAULT TRUE,
+
+                       created_at DATETIME(6) NOT NULL
+);
+
+-- =========================
+-- CITIZEN PROFILE (email only here)
+-- =========================
+CREATE TABLE citizen_profile (
+                                 user_id BIGINT PRIMARY KEY,
+
+                                 email VARCHAR(150) NOT NULL UNIQUE,
+
+                                 afm VARCHAR(20),
+                                 amka VARCHAR(20),
+                                 full_name VARCHAR(120),
+
+                                 CONSTRAINT fk_citizen_user
+                                     FOREIGN KEY (user_id) REFERENCES users(id)
+                                         ON DELETE CASCADE
+);
+
+-- =========================
+-- EMPLOYEE PROFILE
+-- =========================
+CREATE TABLE employee_profile (
+                                  user_id BIGINT PRIMARY KEY,
+
+                                  department_id BIGINT NOT NULL,
+                                  full_name VARCHAR(120),
+
+                                  CONSTRAINT fk_employee_user
+                                      FOREIGN KEY (user_id) REFERENCES users(id)
+                                          ON DELETE CASCADE,
+
+                                  CONSTRAINT fk_employee_department
+                                      FOREIGN KEY (department_id) REFERENCES department(id)
+);
+
+
+
+-- Ensure next AUTO_INCREMENT continues after our inserts
+ALTER TABLE users AUTO_INCREMENT = 12;
+
+-- -------------------------
+-- USERS
+-- -------------------------
+-- Password mapping (EASY, numeric, different):
+-- admin  -> 111111
+-- e2  -> 200002
+-- e3  -> 200003
+-- e4  -> 200004
+-- e5  -> 200005
+-- e6  -> 200006
+-- e7  -> 200007
+-- e8  -> 200008
+-- e9  -> 200009
+-- e10 -> 200010
+-- e11 -> 200011
+
+INSERT INTO users (id, username, password_hash, role, enabled, created_at) VALUES
+                                                                               (1,  'admin',  '$2b$10$zEv4kS5pBpK8Xzf1e2c.T.ELl8VVBuMruFaEg95lmFi9hoLmAoS8q', 'ADMIN',    TRUE, NOW(6)),
+
+                                                                               (2,  'e2',  '$2b$10$oUA.LSycPfbRC0p79FIoBeX8fUpTAcoB32YXahsc9Gqjt3qjlzDo.', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (3,  'e3',  '$2b$10$BhvpR2z7aGJVX5z1HeFv0uQ04IdUvJkLW9ZcXyFAPAO2VHeauuR0S', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (4,  'e4',  '$2b$10$ySJCn8FRJkVr08ImaH6jCuR1aw1yR0JO2k9CiszZfhd5UvDMas3Vi', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (5,  'e5',  '$2b$10$5umn5I1.7erVw.hkLp4HD.26xLf/H9y9Q0LfzZvmC5U2aj5LxZNAq', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (6,  'e6',  '$2b$10$KidLs50EaPczXUGGI02ameF3WJqaIVMV83BHC.9Um3YAzblAq/5DK', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (7,  'e7',  '$2b$10$M9d/qS2zADhsPedl4BiThuUsMPnRD3MgOpOtJv5aHFadYxLeHJKDG', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (8,  'e8',  '$2b$10$5v47nJCkegw.OD1CoHpnTuJwJt5TcOF0EKud/aRA4sk9du.zYWfyO', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (9,  'e9',  '$2b$10$jbu6bbUK0D2ibrUl1vSUcuoeqn1avHLsAmrampfgpporgMu91GKs6', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (10, 'e10', '$2b$10$HTnu9ukRhxKBkHo5SxTV2OTEEQCWN0.u6PFWXGdJbUYXlS9A1/Jfy', 'EMPLOYEE', TRUE, NOW(6)),
+                                                                               (11, 'e11', '$2b$10$odAepXm5V1hIwqf/fX0LDukN5bOgRgmp7JCF4Oi4.5ErloLVSXfae', 'EMPLOYEE', TRUE, NOW(6));
+
+-- -------------------------
+-- EMPLOYEE PROFILES
+-- (change department_id=1 if needed)
+-- -------------------------
+INSERT INTO employee_profile (user_id, department_id, full_name) VALUES
+                                                                     (2,  1, 'Γεώργιος Αντωνίου'),
+                                                                     (3,  1, 'Μαρία Παπαδοπούλου'),
+                                                                     (4,  1, 'Ιωάννης Νικολάου'),
+                                                                     (5,  2, 'Ελένη Κωνσταντίνου'),
+                                                                     (6,  2, 'Δημήτρης Γεωργίου'),
+                                                                     (7,  3, 'Κατερίνα Χριστοδούλου'),
+                                                                     (8,  3, 'Νικόλαος Σταυρίδης'),
+                                                                     (9,  4, 'Αναστασία Βασιλείου'),
+                                                                     (10, 5, 'Παναγιώτης Ιωάννου'),
+                                                                     (11, 5, 'Σοφία Δημητρίου');
+
+
+ALTER TABLE request
+    ADD COLUMN assigned_employee_user_id BIGINT NULL;
+
+ALTER TABLE request
+    ADD CONSTRAINT fk_request_assigned_employee
+        FOREIGN KEY (assigned_employee_user_id) REFERENCES users(id);
+
+CREATE TABLE request_note (
+                              id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                              request_id BIGINT NOT NULL,
+                              employee_user_id BIGINT NOT NULL,
+                              note_type VARCHAR(20) NOT NULL,
+                              text VARCHAR(1000) NOT NULL,
+                              CONSTRAINT fk_request_note_request
+                                  FOREIGN KEY (request_id) REFERENCES request(id) ON DELETE CASCADE,
+                              CONSTRAINT fk_request_note_employee
+                                  FOREIGN KEY (employee_user_id) REFERENCES users(id)
+);
+
+UPDATE users
+SET username = 'a1'
+WHERE id = 1;
+
+
+SHOW CREATE TABLE `request_attachment`;

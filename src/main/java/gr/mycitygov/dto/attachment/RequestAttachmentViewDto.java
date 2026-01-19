@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class RequestAttachmentViewDto {
     private Long id;
-    private String docType;
     private String originalFilename;
     private String contentType;
     private Long fileSize;
@@ -12,9 +11,6 @@ public class RequestAttachmentViewDto {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public String getDocType() { return docType; }
-    public void setDocType(String docType) { this.docType = docType; }
 
     public String getOriginalFilename() { return originalFilename; }
     public void setOriginalFilename(String originalFilename) { this.originalFilename = originalFilename; }

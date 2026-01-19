@@ -75,9 +75,7 @@ public class RequestType {
         return slaDays;
     }
 
-    public void setSlaDays(int slaDays) {
-        this.slaDays = slaDays;
-    }
+    public void setSlaDays(int slaDays) {this.slaDays = slaDays;}
 
     public boolean getActive() {
         return active;
@@ -95,10 +93,8 @@ public class RequestType {
         this.department = department;
     }
 
-    public Integer getRequiredAttachments() {
-        return requiredAttachments; }
+    public Integer getRequiredAttachments() {return requiredAttachments; }
 
-    public void setRequiredAttachments(Integer requiredAttachments) {
-        this.requiredAttachments = requiredAttachments; }
+    public void setRequiredAttachments(Integer requiredAttachments) {this.requiredAttachments = requiredAttachments; }
 
 }
