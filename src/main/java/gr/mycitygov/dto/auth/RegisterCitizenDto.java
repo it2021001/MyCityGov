@@ -27,6 +27,8 @@ public class RegisterCitizenDto {
     @Pattern(regexp = "\\d{11}", message = "amka must be exactly 11 digits")
     private String amka;
 
+    @NotBlank(message = "citizenIdNumber is required")
+    @Pattern(regexp = "^[A-Z]{2}\\d{6}$", message = "citizenIdNumber must be 2 capital letters followed by 6 digits")
     private String citizenIdNumber;
 
 

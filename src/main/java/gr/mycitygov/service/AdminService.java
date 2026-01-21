@@ -42,7 +42,11 @@ public class AdminService {
         if (dto.getDepartmentId() == null) throw new RuntimeException("departmentId is required");
 
         Integer slaDays = parsePositiveInt(dto.getSlaDays(), "slaDays", true);
-        Integer requiredAttachments = parseNonNegativeInt(dto.getRequiredAttachments(), "requiredAttachments", false);
+
+        // requiredAttachments στο table είναι NOT NULL -> βάλε default 0 αν δεν δίνεται
+        Integer requiredAttachments = (dto.getRequiredAttachments() == null)
+                ? 0
+                : parseNonNegativeInt(dto.getRequiredAttachments(), "requiredAttachments", true);
 
         Department dep = departmentRepository.findById(dto.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department not found"));

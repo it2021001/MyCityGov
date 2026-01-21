@@ -6,6 +6,7 @@ import gr.mycitygov.dto.requesttype.RequestTypeViewDto;
 import gr.mycitygov.dto.department.DepartmentScheduleDto;
 import gr.mycitygov.model.DepartmentSchedule;
 import gr.mycitygov.model.RequestType;
+import gr.mycitygov.repository.RequestTypeRepository;
 import gr.mycitygov.service.AdminService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,31 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private final RequestTypeRepository requestTypeRepository;
 
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, RequestTypeRepository requestTypeRepository) {
         this.adminService = adminService;
+        this.requestTypeRepository = requestTypeRepository;
+
     }
 
     // =========================================================
     // REQUEST TYPES (ADMIN)
     // =========================================================
 
+    /**
+     * ADMIN: Λίστα όλων των request types (για διαχείριση).
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/request-types")
+    public List<RequestTypeViewDto> getAllRequestTypes() {
+        return requestTypeRepository.findAll()
+                .stream()
+                .map(adminService::toRequestTypeViewDto)
+                .toList();
+    }
+    
+    
     /**
      * ADMIN: Προσθήκη νέου Request Type.
      * Περιλαμβάνει και την αντιστοίχιση με Department μέσω departmentId.

@@ -7,41 +7,87 @@ CREATE TABLE department (
                             name VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- =========================
+-- REQUEST TYPE
+-- =========================
 CREATE TABLE request_type (
-                              id BIGINT PRIMARY KEY,
+                              id BIGINT PRIMARY KEY AUTO_INCREMENT,
                               name VARCHAR(150) NOT NULL,
                               description VARCHAR(500) NOT NULL,
                               category VARCHAR(30) NOT NULL,
                               sla_days INT NOT NULL,
-                              active BOOLEAN NOT NULL,
+                              active BOOLEAN NOT NULL DEFAULT TRUE,
                               department_id BIGINT NOT NULL,
+                              required_attachments INT NOT NULL DEFAULT 0,
+
                               CONSTRAINT fk_request_type_department
-                                  FOREIGN KEY (department_id) REFERENCES department(id)
+                                  FOREIGN KEY (department_id) REFERENCES department(id),
+
+                              UNIQUE KEY uk_request_type_name (name),
+                              KEY idx_request_type_department_id (department_id)
 );
 
+-- =========================
+-- REQUEST
+-- =========================
 CREATE TABLE request (
                          id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          protocol_number VARCHAR(30) NOT NULL UNIQUE,
                          status VARCHAR(30) NOT NULL,
                          description VARCHAR(1000) NOT NULL,
 
-    -- PROBLEM_REPORT
                          location_text VARCHAR(255),
 
-    -- APPLICATION
                          address VARCHAR(255),
                          purpose VARCHAR(255),
                          afm VARCHAR(20),
                          amka VARCHAR(20),
                          citizen_id_number VARCHAR(30),
 
-                         created_at TIMESTAMP NOT NULL,
-                         due_at TIMESTAMP NOT NULL,
+                         created_at DATETIME(6) NOT NULL,
+                         due_at DATETIME(6) NOT NULL,
+                         closed_at DATETIME(6) NULL,
 
+                         citizen_user_id BIGINT NOT NULL,
                          request_type_id BIGINT NOT NULL,
+                         assigned_employee_user_id BIGINT NULL,
+
                          CONSTRAINT fk_request_request_type
-                             FOREIGN KEY (request_type_id) REFERENCES request_type(id)
+                             FOREIGN KEY (request_type_id) REFERENCES request_type(id),
+
+                         CONSTRAINT fk_request_citizen_user
+                             FOREIGN KEY (citizen_user_id) REFERENCES users(id),
+
+                         CONSTRAINT fk_request_assigned_employee
+                             FOREIGN KEY (assigned_employee_user_id) REFERENCES users(id),
+
+                         KEY idx_request_request_type_id (request_type_id),
+                         KEY idx_request_citizen_user_id (citizen_user_id),
+                         KEY idx_request_assigned_employee_user_id (assigned_employee_user_id)
 );
+
+-- =========================
+-- REQUEST ATTACHMENT
+-- =========================
+CREATE TABLE request_attachment (
+                                    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                                    request_id BIGINT NOT NULL,
+
+                                    original_filename VARCHAR(255) NOT NULL,
+                                    stored_filename VARCHAR(255) NOT NULL,
+                                    content_type VARCHAR(100) NOT NULL,
+                                    file_size BIGINT NOT NULL,
+                                    storage_path VARCHAR(500) NOT NULL,
+
+                                    uploaded_at DATETIME(6) NOT NULL,
+
+                                    CONSTRAINT fk_request_attachment_request
+                                        FOREIGN KEY (request_id) REFERENCES request(id),
+
+                                    KEY idx_request_attachment_request_id (request_id)
+);
+
+
 
 INSERT INTO department (id, name) VALUES
                                       (1, 'ΚΕΠ'),
@@ -161,30 +207,6 @@ SET description = 'Αναφέρετε προβλήματα σε κοινόχρη
 WHERE id = 11;
 
 
-CREATE TABLE request_attachment (
-                                    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-
-                                    request_id BIGINT NOT NULL,
-
-                                    doc_type VARCHAR(50) NOT NULL,          -- π.χ. ID_COPY, PROOF_OF_ADDRESS
-                                    original_filename VARCHAR(255) NOT NULL,
-                                    stored_filename VARCHAR(255) NOT NULL,
-                                    content_type VARCHAR(100) NOT NULL,
-                                    file_size BIGINT NOT NULL,
-                                    storage_path VARCHAR(500) NOT NULL,
-
-                                    uploaded_at TIMESTAMP NOT NULL,
-
-                                    CONSTRAINT fk_request_attachment_request
-                                        FOREIGN KEY (request_id) REFERENCES request(id)
-);
-
-ALTER TABLE request_attachment
-    DROP column doc_type;
-
-ALTER TABLE request_type
-    ADD COLUMN required_attachments INT NOT NULL DEFAULT 0;
-
 
 CREATE TABLE department_schedule (
                                      id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -301,21 +323,7 @@ CREATE TABLE employee_profile (
 -- Ensure next AUTO_INCREMENT continues after our inserts
 ALTER TABLE users AUTO_INCREMENT = 12;
 
--- -------------------------
--- USERS
--- -------------------------
--- Password mapping (EASY, numeric, different):
--- admin  -> 111111
--- e2  -> 200002
--- e3  -> 200003
--- e4  -> 200004
--- e5  -> 200005
--- e6  -> 200006
--- e7  -> 200007
--- e8  -> 200008
--- e9  -> 200009
--- e10 -> 200010
--- e11 -> 200011
+
 
 INSERT INTO users (id, username, password_hash, role, enabled, created_at) VALUES
                                                                                (1,  'admin',  '$2b$10$zEv4kS5pBpK8Xzf1e2c.T.ELl8VVBuMruFaEg95lmFi9hoLmAoS8q', 'ADMIN',    TRUE, NOW(6)),
@@ -348,12 +356,6 @@ INSERT INTO employee_profile (user_id, department_id, full_name) VALUES
                                                                      (11, 5, 'Σοφία Δημητρίου');
 
 
-ALTER TABLE request
-    ADD COLUMN assigned_employee_user_id BIGINT NULL;
-
-ALTER TABLE request
-    ADD CONSTRAINT fk_request_assigned_employee
-        FOREIGN KEY (assigned_employee_user_id) REFERENCES users(id);
 
 CREATE TABLE request_note (
                               id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -371,5 +373,24 @@ UPDATE users
 SET username = 'a1'
 WHERE id = 1;
 
+-- -------------------------
+-- USERS
+-- -------------------------
+-- Password mapping (EASY, numeric, different):
+-- admin  -> 111111
+-- e2  -> 200002
+-- e3  -> 200003
+-- e4  -> 200004
+-- e5  -> 200005
+-- e6  -> 200006
+-- e7  -> 200007
+-- e8  -> 200008
+-- e9  -> 200009
+-- e10 -> 200010
+-- e11 -> 200011
+-- c1@mail.com / c15-> 123456
+-- c2@mail.com / c16-> 123456
+-- c3@mail.com / c17-> 123456
+-- c4@mail.com / c18-> 123456
 
-SHOW CREATE TABLE `request_attachment`;
+DELETE FROM users WHERE id = 12 or id =13;
