@@ -377,7 +377,7 @@ WHERE id = 1;
 -- USERS
 -- -------------------------
 -- Password mapping (EASY, numeric, different):
--- admin  -> 111111
+-- a1  -> 111111
 -- e2  -> 200002
 -- e3  -> 200003
 -- e4  -> 200004
